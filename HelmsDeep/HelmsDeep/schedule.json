@@ -1,0 +1,13 @@
+{
+	"Job":[
+	{
+		"StartType":1,
+		"Period":"1:30",
+		"Assembly":"test.dll",
+		"Parameters":
+		{
+			"param1":"value1",
+			"param2":"value2"
+		}
+	}]
+}
