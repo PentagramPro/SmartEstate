@@ -72,7 +72,7 @@ namespace HelmsDeep
                     plugin.Init();
                     JobWrapper.Modules[plugin.Name] = plugin;
                 }
-
+                log.Info("------------------");
                 log.Info("Назначаем работы");
                  
                 foreach (var job in context.Schedule.Jobs)
@@ -143,7 +143,7 @@ namespace HelmsDeep
                     break;
             }
             tb.WithSimpleSchedule(x => x.WithIntervalInMinutes(job.PeriodMinutes).RepeatForever());
-
+            log.Info("  модуль {0} вызывается каждые {1} минут(ы)", job.Assembly,job.PeriodMinutes);
             context.Scheduler.ScheduleJob(jobDetail, tb.Build());
         }
     }

@@ -13,7 +13,8 @@ namespace HelmsDeep.Model
         public static Dictionary<string, IModule> Modules = new Dictionary<string, IModule>(); 
         public void Execute(IJobExecutionContext context)
         {
-            IModule mod = Modules[context.JobDetail.JobDataMap["assembly"].ToString()];
+            string name = context.JobDetail.JobDataMap["assembly"].ToString();
+            IModule mod = Modules[name];
             mod.Execute();
         }
     }

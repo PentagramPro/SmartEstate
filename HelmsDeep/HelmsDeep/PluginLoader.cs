@@ -53,7 +53,7 @@ namespace CrypTool
           
           if (type.GetInterface(pluginType.FullName) != null )
           {
-            pluginTypes.Add(new LoadedType() {t=type,Assembly = assembly.FullName});
+            pluginTypes.Add(new LoadedType() {t=type,Assembly = assembly.GetName().Name});
           }
         }
       }
