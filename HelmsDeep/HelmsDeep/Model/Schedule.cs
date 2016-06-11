@@ -10,7 +10,7 @@ namespace HelmsDeep.Model
 {
     public class Schedule
     {
-        public List<ScheduleJob> Job = new List<ScheduleJob>();
+        public List<ScheduleJob> Jobs = new List<ScheduleJob>();
 
         public static Schedule Load(string path)
         {

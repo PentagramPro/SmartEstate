@@ -10,10 +10,14 @@ using System.Linq.Expressions;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using CrypTool;
 using HelmsDeep.Model;
+using HelmsDeepCommon;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using Quartz;
+using Quartz.Impl;
 
 
 namespace HelmsDeep
@@ -25,6 +29,7 @@ namespace HelmsDeep
         
         private string logFile = "logs/application.log";
         private static Logger log = LogManager.GetCurrentClassLogger();
+        private PluginLoader<IModule> modulesLoader;
         private Context context;
         
 
@@ -50,12 +55,39 @@ namespace HelmsDeep
             log.Info("Сервис запущен "+DateTime.Now.ToString(CultureInfo.CurrentCulture));
             context = new Context();
             string schedulePath = Path.Combine(rootPath, scheduleFile);
-            
-            context.Schedule = Schedule.Load(schedulePath);
-            
-            log.Info("Тест");
+
+            context.Scheduler= StdSchedulerFactory.GetDefaultScheduler();
+
+            try
+            {
+                log.Info("Загружаем расписание");
+                context.Schedule = Schedule.Load(schedulePath);
+
+                log.Info("Загружаем исполняющие модули");
+                modulesLoader = new PluginLoader<IModule>((assembly, module) => module.Name=assembly, rootPath);
+
+                foreach (var plugin in modulesLoader.Plugins)
+                {
+                    log.Info("Инициализируем "+plugin.Name);
+                    plugin.Init();
+                    JobWrapper.Modules[plugin.Name] = plugin;
+                }
+
+                log.Info("Назначаем работы");
+                 
+                foreach (var job in context.Schedule.Jobs)
+                {
+                    ScheduleJob(job);
+                }
+
+                context.Scheduler.Start();
+            }
+            catch (Exception e)
+            {
+                log.Error(e);
+            }
             /*Schedule s = new Schedule();
-            s.Job.Add(new ScheduleJob()
+            s.Jobs.Add(new ScheduleJob()
             {
                 Assembly = "test.dll",Parameters =  new Dictionary<string, string>()
                 {
@@ -71,6 +103,7 @@ namespace HelmsDeep
 
         protected override void OnStop()
         {
+            context.Scheduler.Shutdown();
         }
 
 
@@ -94,6 +127,24 @@ namespace HelmsDeep
 
             // Step 5. Activate the configuration
             LogManager.Configuration = config;
+        }
+
+        void ScheduleJob(ScheduleJob job)
+        {
+            IJobDetail jobDetail = JobBuilder.Create<JobWrapper>().UsingJobData("assembly",job.Assembly).Build();
+
+            var tb = TriggerBuilder.Create();
+            switch (job.StartType)
+            {
+                case JobStartType.Now:
+                    tb.StartNow();
+                    break;
+                case JobStartType.InTime:
+                    break;
+            }
+            tb.WithSimpleSchedule(x => x.WithIntervalInMinutes(job.PeriodMinutes).RepeatForever());
+
+            context.Scheduler.ScheduleJob(jobDetail, tb.Build());
         }
     }
 }

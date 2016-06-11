@@ -10,7 +10,7 @@ namespace HelmsDeep.Model
     public class ScheduleJob
     {
         public JobStartType StartType;
-        public string Period;
+        public int PeriodMinutes;
         public string Assembly;
         public Dictionary<string, string> Parameters;
     }
