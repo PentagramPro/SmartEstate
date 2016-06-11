@@ -6,24 +6,27 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using HelmsDeep.Model;
-using log4net;
-using log4net.Appender;
-using log4net.Config;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
+
 
 namespace HelmsDeep
 {
+    
     public partial class HelmsService : ServiceBase
     {
         private string scheduleFile = "schedule.json";
         
         private string logFile = "logs/application.log";
-        
+        private static Logger log = LogManager.GetCurrentClassLogger();
         private Context context;
-        private ILog log = LogManager.GetLogger(typeof (HelmsService));
+        
 
         public HelmsService()
         {
@@ -38,19 +41,19 @@ namespace HelmsDeep
         #endif
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
             string logPath = Path.Combine(rootPath, logFile);
-            Directory.CreateDirectory(logPath);
+            Directory.CreateDirectory(Path.GetDirectoryName(logPath));
+
+            SetupLogger(logPath);
+
             
-
-            var ap = new RollingFileAppender();
-            ap.File = logPath;
-            BasicConfigurator.Configure(ap);
-
+            log.Info("===================================");
             log.Info("Сервис запущен "+DateTime.Now.ToString(CultureInfo.CurrentCulture));
             context = new Context();
             string schedulePath = Path.Combine(rootPath, scheduleFile);
             
             context.Schedule = Schedule.Load(schedulePath);
             
+            log.Info("Тест");
             /*Schedule s = new Schedule();
             s.Job.Add(new ScheduleJob()
             {
@@ -68,6 +71,29 @@ namespace HelmsDeep
 
         protected override void OnStop()
         {
+        }
+
+
+        void SetupLogger(string logPath)
+        {
+            // Step 1. Create configuration object 
+            var config = new LoggingConfiguration();
+
+            // Step 2. Create targets and add them to the configuration 
+            var fileTarget = new FileTarget();
+            config.AddTarget("file", fileTarget);
+
+            // Step 3. Set target properties 
+            fileTarget.FileName = logPath;
+            fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
+            fileTarget.Encoding = Encoding.UTF8;
+
+            // Step 4. Define rules
+            var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
+            config.LoggingRules.Add(rule2);
+
+            // Step 5. Activate the configuration
+            LogManager.Configuration = config;
         }
     }
 }
