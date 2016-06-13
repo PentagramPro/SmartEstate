@@ -10,7 +10,7 @@ namespace HelmsDeepCommon
     {
         string Name { get; set; }
 
-        void Init();
+        void Init(Dictionary<string, string> parameters);
 
 
         void Execute();

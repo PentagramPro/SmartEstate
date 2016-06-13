@@ -11,7 +11,7 @@ namespace HelmsDeepCommon
     {
         public string Name { get; set; }
 
-        public abstract void Init();
+        public abstract void Init(Dictionary<string, string> parameters);
 
 
         public abstract void Execute();

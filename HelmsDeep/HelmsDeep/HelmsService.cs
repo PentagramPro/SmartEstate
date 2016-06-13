@@ -118,7 +118,7 @@ namespace HelmsDeep
 
             // Step 3. Set target properties 
             fileTarget.FileName = logPath;
-            fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}";
+            fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} |  ${message}";
             fileTarget.Encoding = Encoding.UTF8;
 
             // Step 4. Define rules

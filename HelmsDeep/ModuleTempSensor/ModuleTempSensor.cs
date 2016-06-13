@@ -11,15 +11,19 @@ namespace ModuleTempSensor
     public class ModuleTempSensor : BaseModule
     {
         private static Logger log = LogManager.GetCurrentClassLogger();
-
-        public override void Init()
+        private ArduinoTransport transport;
+        public override void Init(Dictionary<string,string> parameters)
         {
             log.Info("Модуль датчика температуры");
+            
         }
 
         public override void Execute()
         {
-            log.Info("Вызван модуль датчика температуры");
+            log.Info("Измеряем температуру");
+            ArduinoCommand cmd = new ArduinoCommand();
+            cmd.Command = 'R';
+
         }
     }
 }
