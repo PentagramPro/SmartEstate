@@ -64,18 +64,40 @@ namespace HelmsDeep
                 context.Schedule = Schedule.Load(schedulePath);
 
                 log.Info("Загружаем исполняющие модули");
-                modulesLoader = new PluginLoader<IModule>((assembly, module) => module.Name=assembly, rootPath);
-
-                foreach (var plugin in modulesLoader.Plugins)
+                modulesLoader = new PluginLoader<IModule>((type, name) =>
                 {
-                    log.Info("Инициализируем "+plugin.Name);
-                    plugin.Init();
-                    JobWrapper.Modules[plugin.Name] = plugin;
+                    var jobs = context.Schedule.Jobs.Where(p => p.Assembly == name);
+                    List<IModule> res = new List<IModule>();
+                    foreach (var job in jobs)
+                    {
+                        JobRecord rec = new JobRecord();
+                        rec.Assembly = name;
+                        rec.JobParams = job;
+                        rec.Index = JobWrapper.Modules.Count;
+                        rec.Module = (BaseModule)Activator.CreateInstance(type);
+                        res.Add(rec.Module);
+                        rec.Module.Name = name;
+                        JobWrapper.Modules[rec.Index] = rec;
+                    }
+                    return res;
+                });
+
+                foreach (var rec in JobWrapper.Modules.Values)
+                {
+                    log.Info("Инициализируем "+rec.Assembly);
+                    try
+                    {
+                        rec.Module.Init(rec.JobParams.Parameters);
+                    }
+                    catch (Exception e)
+                    {
+                        log.Error("Ошибка при инициализации: "+e.Message);
+                    }
                 }
                 log.Info("------------------");
                 log.Info("Назначаем работы");
                  
-                foreach (var job in context.Schedule.Jobs)
+                foreach (var job in JobWrapper.Modules.Values)
                 {
                     ScheduleJob(job);
                 }
@@ -129,12 +151,12 @@ namespace HelmsDeep
             LogManager.Configuration = config;
         }
 
-        void ScheduleJob(ScheduleJob job)
+        void ScheduleJob(JobRecord job)
         {
-            IJobDetail jobDetail = JobBuilder.Create<JobWrapper>().UsingJobData("assembly",job.Assembly).Build();
+            IJobDetail jobDetail = JobBuilder.Create<JobWrapper>().UsingJobData("index",job.Index).Build();
 
             var tb = TriggerBuilder.Create();
-            switch (job.StartType)
+            switch (job.JobParams.StartType)
             {
                 case JobStartType.Now:
                     tb.StartNow();
@@ -142,8 +164,8 @@ namespace HelmsDeep
                 case JobStartType.InTime:
                     break;
             }
-            tb.WithSimpleSchedule(x => x.WithIntervalInMinutes(job.PeriodMinutes).RepeatForever());
-            log.Info("  модуль {0} вызывается каждые {1} минут(ы)", job.Assembly,job.PeriodMinutes);
+            tb.WithSimpleSchedule(x => x.WithIntervalInMinutes(job.JobParams.PeriodMinutes).RepeatForever());
+            log.Info("  модуль {0} вызывается каждые {1} минут(ы)", job.Assembly,job.JobParams.PeriodMinutes);
             context.Scheduler.ScheduleJob(jobDetail, tb.Build());
         }
     }

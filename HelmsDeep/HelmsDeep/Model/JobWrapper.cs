@@ -10,11 +10,11 @@ namespace HelmsDeep.Model
 {
     public class JobWrapper : IJob
     {
-        public static Dictionary<string, IModule> Modules = new Dictionary<string, IModule>(); 
+        public static Dictionary<int, JobRecord> Modules = new Dictionary<int, JobRecord>(); 
         public void Execute(IJobExecutionContext context)
         {
-            string name = context.JobDetail.JobDataMap["assembly"].ToString();
-            IModule mod = Modules[name];
+            int index = context.JobDetail.JobDataMap.GetIntValue("index");
+            IModule mod = Modules[index].Module;
             mod.Execute();
         }
     }

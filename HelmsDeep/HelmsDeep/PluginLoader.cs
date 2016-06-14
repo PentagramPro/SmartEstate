@@ -8,74 +8,74 @@ using System.Threading.Tasks;
 
 namespace CrypTool
 {
-  public class PluginLoader<T>
-  {
-    public List<T> Plugins; 
-
-    public PluginLoader(Action<string,T> initAction)
+    public class PluginLoader<T>
     {
-      LoadAssemblies(initAction, AssemblyDirectory);
-    }
-    public PluginLoader(Action<string, T> initAction,string path)
-    {
-      LoadAssemblies(initAction, path);
-    }
+        public delegate ICollection<T> HandlePluginFunc(Type type, string assemblyName);
 
-      struct LoadedType
-      {
-          public Type t;
-          public string Assembly;
-      }
-    protected void LoadAssemblies(Action<string, T> initAction,string path)
-    {
-      string[] dllFileNames = null;
+        public List<T> Plugins;
 
-      dllFileNames = Directory.GetFiles(path, "*.dll");
-      ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
-      foreach (string dllFile in dllFileNames)
-      {
-        
-        AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
-        Assembly assembly = Assembly.Load(an);
-        assemblies.Add(assembly);
-      }
-
-      Type pluginType = typeof(T);
-      ICollection<LoadedType> pluginTypes = new List<LoadedType>();
-      foreach (Assembly assembly in assemblies)
-      {
-        if (assembly == null) continue;
-        Type[] types = assembly.GetTypes();
-        foreach (Type type in types)
+        public PluginLoader(HandlePluginFunc pluginCreator)
         {
-          if (type.IsInterface || type.IsAbstract)
-            continue;
-          
-          if (type.GetInterface(pluginType.FullName) != null )
-          {
-            pluginTypes.Add(new LoadedType() {t=type,Assembly = assembly.GetName().Name});
-          }
+            LoadAssemblies(pluginCreator, AssemblyDirectory);
         }
-      }
+        public PluginLoader(HandlePluginFunc pluginCreator, string path)
+        {
+            LoadAssemblies(pluginCreator, path);
+        }
 
-      Plugins = new List<T>(pluginTypes.Count);
-      foreach (LoadedType type in pluginTypes)
-      {
-        T plugin = (T)Activator.CreateInstance(type.t);
-        Plugins.Add(plugin);
-        initAction?.Invoke(type.Assembly,plugin);
-      }
-    }
+        struct LoadedType
+        {
+            public Type t;
+            public string Assembly;
+        }
+        protected void LoadAssemblies(HandlePluginFunc pluginCreator, string path)
+        {
+            string[] dllFileNames = null;
 
-    public static string AssemblyDirectory
-    {
-      get
-      {
-        string codeBase = Assembly.GetExecutingAssembly().CodeBase;
-        UriBuilder uri = new UriBuilder(codeBase);
-        string path = Uri.UnescapeDataString(uri.Path);
-        return Path.GetDirectoryName(path);
-      }
+            dllFileNames = Directory.GetFiles(path, "*.dll");
+            ICollection<Assembly> assemblies = new List<Assembly>(dllFileNames.Length);
+            foreach (string dllFile in dllFileNames)
+            {
+
+                AssemblyName an = AssemblyName.GetAssemblyName(dllFile);
+                Assembly assembly = Assembly.Load(an);
+                assemblies.Add(assembly);
+            }
+
+            Type pluginType = typeof(T);
+            ICollection<LoadedType> pluginTypes = new List<LoadedType>();
+            foreach (Assembly assembly in assemblies)
+            {
+                if (assembly == null) continue;
+                Type[] types = assembly.GetTypes();
+                foreach (Type type in types)
+                {
+                    if (type.IsInterface || type.IsAbstract)
+                        continue;
+
+                    if (type.GetInterface(pluginType.FullName) != null)
+                    {
+                        pluginTypes.Add(new LoadedType() { t = type, Assembly = assembly.GetName().Name });
+                    }
+                }
+            }
+
+            Plugins = new List<T>(pluginTypes.Count);
+            foreach (LoadedType type in pluginTypes)
+            {
+                Plugins.AddRange(pluginCreator(type.t, type.Assembly));
+            }
+        }
+
+        public static string AssemblyDirectory
+        {
+            get
+            {
+                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                return Path.GetDirectoryName(path);
+            }
+        }
     }
-  }
 }

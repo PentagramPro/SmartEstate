@@ -66,6 +66,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Model\Context.cs" />
+    <Compile Include="Model\JobRecord.cs" />
     <Compile Include="Model\JobStartType.cs" />
     <Compile Include="Model\JobWrapper.cs" />
     <Compile Include="Model\Schedule.cs" />
