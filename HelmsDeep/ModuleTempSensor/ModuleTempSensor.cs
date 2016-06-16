@@ -29,7 +29,17 @@ namespace ModuleTempSensor
             log.Info("Измеряем температуру");
             ArduinoCommand cmd = new ArduinoCommand();
             cmd.Command = 'R';
-
+            ArduinoCommand resp;
+            try
+            {
+                transport.SendReceive(cmd, out resp);
+                log.Info("Результат: " + resp.ToString());
+            }
+            catch (TimeoutException ex)
+            {
+                log.Error("Время ожидания ответа от сенсора истекло");
+            }
+            
         }
     }
 }

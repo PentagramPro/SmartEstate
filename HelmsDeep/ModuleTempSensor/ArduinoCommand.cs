@@ -9,7 +9,7 @@ namespace ModuleTempSensor
     public class ArduinoCommand
     {
         public char Command;
-        public List<string> Parameters;
+        public List<string> Parameters = new List<string>();
 
         public byte[] Build()
         {
@@ -19,6 +19,11 @@ namespace ModuleTempSensor
             packet += ";";
             packet = ":" + packet.Length.ToString("X2") + packet;
             return Encoding.ASCII.GetBytes(packet);
+        }
+
+        public override string ToString()
+        {
+            return Command+Parameters.Aggregate((ac, p) => ac + "," + p);
         }
     }
 }

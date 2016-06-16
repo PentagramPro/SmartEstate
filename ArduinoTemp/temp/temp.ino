@@ -39,6 +39,10 @@ void loop() {
     {
       process(packet);    
     }
+    else
+    {
+      Serial.print(":04E,5;");
+    }
   }
   delay(50);
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CrypTool;
 using HelmsDeep.Model;
@@ -97,6 +98,7 @@ namespace HelmsDeep
                 log.Info("------------------");
                 log.Info("Назначаем работы");
                  
+                Thread.Sleep(10000);
                 foreach (var job in JobWrapper.Modules.Values)
                 {
                     ScheduleJob(job);
