@@ -18,7 +18,7 @@ void setup() {
 
 void process(String packet)
 {
-  if(packet.charAt(0)=='R')
+  if(packet.charAt(2)=='R')
   {
     switch(sensor.read()){    // читаем показания датчика
       case DHT_OK:               Serial.print((String)":00R,"+sensor.tem+","+sensor.hum+";");  break;
@@ -28,10 +28,15 @@ void process(String packet)
       default:                   Serial.print(         ":04E,4;");                               break;
     }
   }
+  else
+  {
+    Serial.print(":04E,6;");
+  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   if(Serial.read()==':')
   {
     String packet = Serial.readStringUntil(';');
@@ -44,5 +49,6 @@ void loop() {
       Serial.print(":04E,5;");
     }
   }
+  
   delay(50);
 }
