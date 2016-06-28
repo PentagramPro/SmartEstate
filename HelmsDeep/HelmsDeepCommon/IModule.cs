@@ -13,6 +13,6 @@ namespace HelmsDeepCommon
         void Init(Dictionary<string, string> parameters);
 
 
-        void Execute();
+        void Execute(DataRecorder recorder);
     }
 }

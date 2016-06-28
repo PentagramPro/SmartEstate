@@ -29,6 +29,7 @@ namespace HelmsDeep
         private string scheduleFile = "schedule.json";
         
         private string logFile = "logs/application.log";
+        private string recordsPath = "records";
         private static Logger log = LogManager.GetCurrentClassLogger();
         private PluginLoader<IModule> modulesLoader;
         private Context context;
@@ -55,9 +56,12 @@ namespace HelmsDeep
             log.Info("===================================");
             log.Info("Сервис запущен "+DateTime.Now.ToString(CultureInfo.CurrentCulture));
             context = new Context();
+            JobWrapper.ServiceContext = context;
+
             string schedulePath = Path.Combine(rootPath, scheduleFile);
 
             context.Scheduler= StdSchedulerFactory.GetDefaultScheduler();
+            context.Recorder = new DataRecorder(Path.Combine(rootPath,recordsPath));
 
             try
             {

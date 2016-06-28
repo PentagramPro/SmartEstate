@@ -13,6 +13,7 @@ namespace HelmsDeep.Model
     {
         public static Dictionary<int, JobRecord> Modules = new Dictionary<int, JobRecord>();
         private static Logger log = LogManager.GetCurrentClassLogger();
+        public static Context ServiceContext;
 
         public void Execute(IJobExecutionContext context)
         {
@@ -21,7 +22,7 @@ namespace HelmsDeep.Model
             {
                 
                 IModule mod = Modules[index].Module;
-                mod.Execute();
+                mod.Execute(ServiceContext.Recorder);
             }
             catch (KeyNotFoundException ex)
             {
