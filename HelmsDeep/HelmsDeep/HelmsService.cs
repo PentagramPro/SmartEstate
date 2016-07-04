@@ -92,7 +92,7 @@ namespace HelmsDeep
                     log.Info("Инициализируем "+rec.Assembly);
                     try
                     {
-                        rec.Module.Init(rec.JobParams.Parameters);
+                        rec.Module.Init(rec.JobParams.Parameters,rootPath);
                     }
                     catch (Exception e)
                     {

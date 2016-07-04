@@ -11,10 +11,12 @@ namespace HelmsDeepCommon
     {
         protected Dictionary<string, string> Parameters; 
         public string Name { get; set; }
+        protected string BaseDir { get; private set; }
 
-        public void Init(Dictionary<string, string> parameters)
+        public void Init(Dictionary<string, string> parameters, string baseDir)
         {
             Parameters = parameters;
+            BaseDir = baseDir;
             InitInternal();
         }
 
