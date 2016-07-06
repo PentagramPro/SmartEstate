@@ -114,7 +114,8 @@ namespace HelmsDeep
             {
                 log.Error(e);
             }
-            /*Schedule s = new Schedule();
+            /*
+            Schedule s = new Schedule();
             s.Jobs.Add(new ScheduleJob()
             {
                 Assembly = "test.dll",Parameters =  new Dictionary<string, string>()
@@ -122,11 +123,23 @@ namespace HelmsDeep
                     {"param1","value1"},
                     {"param2","value2"},
                 },
-                Period = "1:30",
+                PeriodMinutes = 2,
                 StartType =  JobStartType.InTime
                 
             });
-            s.Save(schedulePath);*/
+            s.Jobs.Add(new ScheduleJob()
+            {
+                Assembly = "test.dll",
+                Parameters = new Dictionary<string, string>()
+                {
+                    {"param1","value1"},
+                    {"param2","value2"},
+                },
+                PeriodMinutes = 2,
+                StartType = JobStartType.InTime
+
+            });
+            s.Save(Path.Combine(rootPath,"test.json"));*/
         }
 
         protected override void OnStop()

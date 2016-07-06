@@ -43,6 +43,12 @@ namespace ModuleTempSensor
             {
                 log.Error("Время ожидания ответа от сенсора истекло");
             }
+            catch (Exception ex)
+            {
+                
+                log.Error("Неизвестная ошибка при обмене данными с сенсором");
+                log.Error(ex.ToString());
+            }
             
         }
     }

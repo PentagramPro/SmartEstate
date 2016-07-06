@@ -26,6 +26,8 @@ namespace HelmsDeepCommon
         {
             
             this.dataPath = dataPath;
+            if (!Directory.Exists(dataPath))
+                Directory.CreateDirectory(dataPath);
             currentFile = File.AppendText(FileDataPath);
         }
 

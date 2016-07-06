@@ -39,7 +39,7 @@ namespace ModuleTempSensor
         public void SendReceive(ArduinoCommand cmd, out ArduinoCommand resp)
         {
             byte[] packet = cmd.Build();
-            port.Flush();
+            port.ReadExisting();
             log.Info("Отправляем команду: {0}",Encoding.ASCII.GetString(packet));
             port.Write(packet,0,packet.Length);
             int read = port.Read(packet, 0, 3);
@@ -55,15 +55,18 @@ namespace ModuleTempSensor
             }
             string strLen = Encoding.ASCII.GetString(packet, 1, 2);
             int len = int.Parse(strLen,NumberStyles.AllowHexSpecifier);
-            packet = new byte[len];
-            read = port.Read(packet, 0, len);
-            if (read != len)
+            string strResp = "";
+            if (len > 0)
             {
-                log.Error("Не удалось прочитать команду: неправильная длина");
-                throw new IOException();
+                packet = new byte[len];
+                read = port.Read(packet, 0, len);
+                if (read != len)
+                {
+                    log.Error("Не удалось прочитать команду: неправильная длина");
+                    throw new IOException();
+                }
+                strResp = Encoding.ASCII.GetString(packet, 1, packet.Length - 2);
             }
-            string strResp = Encoding.ASCII.GetString(packet,1,packet.Length-2);
-
             resp = new ArduinoCommand
             {
                 Command = Encoding.ASCII.GetString(packet, 0, 1)[0],

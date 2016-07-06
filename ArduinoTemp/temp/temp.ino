@@ -21,7 +21,17 @@ void process(String packet)
   if(packet.charAt(2)=='R')
   {
     switch(sensor.read()){    // читаем показания датчика
-      case DHT_OK:               Serial.print((String)":00R,"+sensor.tem+","+sensor.hum+";");  break;
+      case DHT_OK:
+      {
+        String cmd = (String)("R,")+sensor.tem+","+sensor.hum+";";
+        Serial.print(":");
+        if(cmd.length()<0x0f)
+          Serial.print("0");
+        Serial.print(cmd.length(),HEX);
+        
+        Serial.print(cmd);  
+      }
+        break;
       case DHT_ERROR_CHECKSUM:   Serial.print(         ":04E,1;");                     break;
       case DHT_ERROR_DATA:       Serial.print(         ":04E,2;"); break;
       case DHT_ERROR_NO_REPLY:   Serial.print(         ":04E,3;");                          break;

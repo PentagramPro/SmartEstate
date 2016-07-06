@@ -1,13 +1,22 @@
 {
-	"Job":[
+	"Jobs":[
 	{
 		"StartType":1,
-		"Period":"1:30",
-		"Assembly":"test.dll",
+		"PeriodMinutes":1,
+		"Assembly":"ModuleTempSensor",
 		"Parameters":
 		{
-			"param1":"value1",
-			"param2":"value2"
+			"port":"COM3",
+			"baudrate":"9600"
+		}
+	},
+	{
+		"StartType":1,
+		"PeriodMinutes":3,
+		"Assembly":"ModuleReportGenerator",
+		"Parameters":
+		{
+			"template":"report.tpl"
 		}
 	}]
 }

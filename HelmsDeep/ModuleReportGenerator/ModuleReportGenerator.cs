@@ -5,19 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HelmsDeepCommon;
+using NLog;
 
 namespace ModuleReportGenerator
 {
     public class ModuleReportGenerator : BaseModule
     {
-       
+        private static Logger log = LogManager.GetCurrentClassLogger();
         protected override void InitInternal()
         {
-            CheckParam("Template");
+            CheckParam("template");
         }
 
         public override void Execute(DataRecorder recorder)
         {
+            log.Info("--- Формируем отчет ---");
             TemplateProcessor proc = new TemplateProcessor();
             recorder.ReadRecords((dt, name, values) =>
             {
@@ -34,7 +36,7 @@ namespace ModuleReportGenerator
             });
             recorder.Rotate();
 
-            proc.ProcessFile(Path.Combine(BaseDir,Parameters["Template"]));
+            proc.ProcessFile(Path.Combine(BaseDir,Parameters["template"]));
 
         }
     }

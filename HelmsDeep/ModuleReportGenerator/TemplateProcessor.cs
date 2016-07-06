@@ -103,7 +103,7 @@ namespace ModuleReportGenerator
             var ms = regFunc.Matches(line);
             regFunc.Replace(line, m =>
             {
-                return ExecuteFunction(m.Groups[0].Value,lineNum, m.Groups[1].Value.Split(','));
+                return ExecuteFunction(m.Groups[1].Value,lineNum, m.Groups[2].Value.Split(','));
             });
 
             return line;
