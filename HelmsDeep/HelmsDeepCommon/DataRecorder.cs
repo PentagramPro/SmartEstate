@@ -49,6 +49,7 @@ namespace HelmsDeepCommon
                     }
 
                     currentFile.WriteLine(sb.ToString());
+                    currentFile.Flush();
                 }
                 catch (Exception ex)
                 {

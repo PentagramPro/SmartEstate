@@ -15,6 +15,7 @@ namespace ModuleReportGenerator
         protected override void InitInternal()
         {
             CheckParam("template");
+            CheckParam("reportsDir");
         }
 
         public override void Execute(DataRecorder recorder)
@@ -38,6 +39,13 @@ namespace ModuleReportGenerator
 
             proc.ProcessFile(Path.Combine(BaseDir,Parameters["template"]));
 
+            string reportsDir = Path.Combine(BaseDir, Parameters["reportsDir"]);
+
+            Directory.CreateDirectory(reportsDir);
+
+            string reportFile = Path.Combine(reportsDir,DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".report");
+
+            File.WriteAllText(reportFile, proc.Report);
         }
     }
 }

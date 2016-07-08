@@ -49,6 +49,7 @@ namespace HelmsDeep
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
             string logPath = Path.Combine(rootPath, logFile);
             Directory.CreateDirectory(Path.GetDirectoryName(logPath));
+            Directory.CreateDirectory(Path.Combine(rootPath, "reports"));
 
             SetupLogger(logPath);
 
@@ -172,20 +173,22 @@ namespace HelmsDeep
 
         void ScheduleJob(JobRecord job)
         {
-            IJobDetail jobDetail = JobBuilder.Create<JobWrapper>().UsingJobData("index",job.Index).Build();
+            try {
+                IJobDetail jobDetail = JobBuilder.Create<JobWrapper>()
+                    .UsingJobData("index", job.Index)
+                    .Build();
 
-            var tb = TriggerBuilder.Create();
-            switch (job.JobParams.StartType)
-            {
-                case JobStartType.Now:
-                    tb.StartNow();
-                    break;
-                case JobStartType.InTime:
-                    break;
+                var tb = TriggerBuilder.Create();
+
+                tb.WithCronSchedule(job.JobParams.CronString);
+                
+                log.Info("  модуль {0}, cron string: {1}", job.Assembly, job.JobParams.CronString);
+                context.Scheduler.ScheduleJob(jobDetail, tb.Build());
             }
-            tb.WithSimpleSchedule(x => x.WithIntervalInMinutes(job.JobParams.PeriodMinutes).RepeatForever());
-            log.Info("  модуль {0} вызывается каждые {1} минут(ы)", job.Assembly,job.JobParams.PeriodMinutes);
-            context.Scheduler.ScheduleJob(jobDetail, tb.Build());
+            catch(FormatException ex)
+            {
+                log.Error("Работа "+job.Assembly+": ошибка в cron string: " + ex.Message);
+            }
         }
     }
 }

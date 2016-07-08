@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HelmsDeepCommon;
 using NLog;
+using System.Globalization;
 
 namespace ModuleTempSensor
 {
@@ -34,8 +35,8 @@ namespace ModuleTempSensor
             {
                 transport.SendReceive(cmd, out resp);
                 float temp=0, hum=0;
-                float.TryParse(resp.Parameters[0], out temp);
-                float.TryParse(resp.Parameters[0], out hum);
+                float.TryParse(resp.Parameters[0], NumberStyles.Float,CultureInfo.InvariantCulture,  out temp);
+                float.TryParse(resp.Parameters[1], NumberStyles.Float, CultureInfo.InvariantCulture, out hum);
                 recorder.Record(Name,new []{temp,hum});
                 log.Info("Результат: " + resp.ToString());
             }

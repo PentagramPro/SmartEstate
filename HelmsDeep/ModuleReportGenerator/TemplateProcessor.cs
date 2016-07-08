@@ -101,18 +101,18 @@ namespace ModuleReportGenerator
         string ProcessLine(string line, int lineNum)
         {
             var ms = regFunc.Matches(line);
-            regFunc.Replace(line, m =>
+            return regFunc.Replace(line, m =>
             {
                 return ExecuteFunction(m.Groups[1].Value,lineNum, m.Groups[2].Value.Split(','));
             });
 
-            return line;
         }
 
         string ExecuteFunction(string name, int lineNum, string[] parameters)
         {
             if(parameters.Length<2)
                 throw new TemplateException($"Недостаточно параметров у функции {name} в строке {lineNum}");
+            
             string module = parameters[0];
             int index = 0;
             if (!int.TryParse(parameters[1], out index))
@@ -134,7 +134,7 @@ namespace ModuleReportGenerator
             }
             catch (KeyNotFoundException ex)
             {
-                throw new TemplateException($"Функция {name}, строка {lineNum}: ошибка получения данных. Убедитесь, что модуль {module} содержит индекс {index}");
+                return $"({name}, {index}: нет данных)";                
             }
             catch (Exception ex)
             {

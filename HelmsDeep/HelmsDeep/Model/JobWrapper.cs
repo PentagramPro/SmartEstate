@@ -30,7 +30,7 @@ namespace HelmsDeep.Model
             }
             catch (Exception ex)
             {
-                log.Error($"При выполнении задания произошла ошибка: {ex.ToString()}");
+                log.Error($"При выполнении задания произошла ошибка");
             }
         }
     }
