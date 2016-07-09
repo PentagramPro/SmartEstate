@@ -1,8 +1,7 @@
 {
 	"Jobs":[
 	{
-		"StartType":1,
-		"PeriodMinutes":1,
+		"CronString":"0\15 * * * * ?",
 		"Assembly":"ModuleTempSensor",
 		"Parameters":
 		{
@@ -11,12 +10,12 @@
 		}
 	},
 	{
-		"StartType":1,
-		"PeriodMinutes":3,
+		"CronString":"0 0\3 * * * ?",
 		"Assembly":"ModuleReportGenerator",
 		"Parameters":
 		{
-			"template":"report.tpl"
+			"template":"report.tpl",
+			"reportsDir":"reports"
 		}
 	}]
 }

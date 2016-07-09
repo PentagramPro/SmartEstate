@@ -28,7 +28,7 @@ namespace HelmsDeep
     {
         private string scheduleFile = "schedule.json";
         
-        private string logFile = "logs/application.log";
+        private string logFile = "logs";
         private string recordsPath = "records";
         private static Logger log = LogManager.GetCurrentClassLogger();
         private PluginLoader<IModule> modulesLoader;
@@ -148,7 +148,7 @@ namespace HelmsDeep
             context.Scheduler.Shutdown();
         }
 
-
+		
         void SetupLogger(string logPath)
         {
             // Step 1. Create configuration object 
@@ -156,19 +156,31 @@ namespace HelmsDeep
 
             // Step 2. Create targets and add them to the configuration 
             var fileTarget = new FileTarget();
-            config.AddTarget("file", fileTarget);
-
-            // Step 3. Set target properties 
-            fileTarget.FileName = logPath;
+            fileTarget.FileName = Path.Combine(logPath,"all.log");
             fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} |  ${message}";
             fileTarget.Encoding = Encoding.UTF8;
+			fileTarget.ArchiveEvery = FileArchivePeriod.Day;
+			fileTarget.ArchiveFileName = Path.Combine(logPath, "all.{########}.log");
+			fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
+			fileTarget.MaxArchiveFiles = 10;
 
-            // Step 4. Define rules
-            var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
-            config.LoggingRules.Add(rule2);
+			var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
+			
+			config.AddTarget("file", fileTarget);
+			config.LoggingRules.Add(rule2);
 
-            // Step 5. Activate the configuration
-            LogManager.Configuration = config;
+			fileTarget = new FileTarget();
+			fileTarget.FileName = Path.Combine(logPath, "errors.log"); ;
+			fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} |  ${message}";
+			fileTarget.Encoding = Encoding.UTF8;
+
+			rule2 = new LoggingRule("*", LogLevel.Error, fileTarget);
+
+			config.AddTarget("file_errors", fileTarget);
+			config.LoggingRules.Add(rule2);
+
+			// Step 5. Activate the configuration
+			LogManager.Configuration = config;
         }
 
         void ScheduleJob(JobRecord job)

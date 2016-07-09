@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelmsDeep", "HelmsDeep\HelmsDeep.csproj", "{2FA3430F-9DB5-4083-A73D-0621CBE26E88}"
 	ProjectSection(ProjectDependencies) = postProject
 		{ADEFAA62-C2F3-47AC-BA60-9A0900D2B8BB} = {ADEFAA62-C2F3-47AC-BA60-9A0900D2B8BB}
+		{AB9947E5-DE0D-453A-B3F5-2D738299342C} = {AB9947E5-DE0D-453A-B3F5-2D738299342C}
 		{FE1170F6-3A99-4241-9786-0985ECADB3A0} = {FE1170F6-3A99-4241-9786-0985ECADB3A0}
 	EndProjectSection
 EndProject
@@ -14,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleTempSensor", "ModuleTempSensor\ModuleTempSensor.csproj", "{ADEFAA62-C2F3-47AC-BA60-9A0900D2B8BB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleReportGenerator", "ModuleReportGenerator\ModuleReportGenerator.csproj", "{FE1170F6-3A99-4241-9786-0985ECADB3A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleMailer", "ModuleMailer\ModuleMailer.csproj", "{AB9947E5-DE0D-453A-B3F5-2D738299342C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +40,10 @@ Global
 		{FE1170F6-3A99-4241-9786-0985ECADB3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE1170F6-3A99-4241-9786-0985ECADB3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE1170F6-3A99-4241-9786-0985ECADB3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB9947E5-DE0D-453A-B3F5-2D738299342C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9947E5-DE0D-453A-B3F5-2D738299342C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9947E5-DE0D-453A-B3F5-2D738299342C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9947E5-DE0D-453A-B3F5-2D738299342C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
