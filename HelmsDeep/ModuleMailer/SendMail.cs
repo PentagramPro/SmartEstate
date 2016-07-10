@@ -10,24 +10,20 @@ namespace ModuleMailer
 {
     public class SendMail
     {
-		string Login, Password;
-		string From;
-		IEnumerable<string> Targets;
+		MailSettings Settings;
+		
 
-		public SendMail(string login, string password, string from, IEnumerable<string> targets)
+		public SendMail(MailSettings settings)
 		{
-			Login = login;
-			Password = password;
-			From = from;
-			Targets = targets;
+			Settings = settings;
 		}
 
         public void Send(string subject, string text)
         {
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress(From);
-			foreach (var addr in Targets)
+            mail.From = new MailAddress(Settings.From);
+			foreach (var addr in Settings.Targets)
 				mail.To.Add(addr);
 
             mail.Subject = subject;
@@ -35,7 +31,7 @@ namespace ModuleMailer
 
             SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
             smtpServer.Port = 587;
-            smtpServer.Credentials = new System.Net.NetworkCredential(Login,Password);
+            smtpServer.Credentials = Settings.Credential;
             smtpServer.EnableSsl = true;
             ServicePointManager.ServerCertificateValidationCallback =
                 delegate (object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)

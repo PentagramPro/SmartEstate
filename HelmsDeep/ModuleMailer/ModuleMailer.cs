@@ -15,6 +15,8 @@ namespace ModuleMailer
 		private static Logger log = LogManager.GetCurrentClassLogger();
 		object lockObject = new object();
 		SendMail mail;
+		MailChecker mailChecker;
+		MailSettings settings;
 
 		protected override void InitInternal()
 		{
@@ -23,11 +25,16 @@ namespace ModuleMailer
 			CheckParam("addresses");
 
 			CheckParam("reportsDir");
-
-			mail = new SendMail(Parameters["login"], Parameters["password"],
-				Parameters["login"] + "@gmail.com",
-				Parameters["addresses"].Split(new char[] { ' ' }, 
-					StringSplitOptions.RemoveEmptyEntries));
+			settings = new MailSettings()
+			{
+				Credential = new System.Net.NetworkCredential
+					(Parameters["login"], Parameters["password"]),
+				From = Parameters["login"] + "@gmail.com",
+				Targets = Parameters["addresses"].Split(new char[] { ' ' },
+					StringSplitOptions.RemoveEmptyEntries)
+			};
+			mail = new SendMail(settings);
+			mailChecker = new MailChecker(settings);
 		}
 
 		public override void Execute(DataRecorder recorder)
@@ -62,7 +69,7 @@ namespace ModuleMailer
 				}
 			}
 
-
+			mailChecker.Check();
 
 			Monitor.Exit(lockObject);
 

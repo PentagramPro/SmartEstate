@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MailChecker.cs" />
+    <Compile Include="MailSettings.cs" />
     <Compile Include="ModuleMailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SendMail.cs" />
