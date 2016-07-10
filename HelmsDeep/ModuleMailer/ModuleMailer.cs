@@ -61,6 +61,9 @@ namespace ModuleMailer
 					log.Error($"Ошибка отправки отчета {filename}: {ex.Message}");
 				}
 			}
+
+
+
 			Monitor.Exit(lockObject);
 
 		}
