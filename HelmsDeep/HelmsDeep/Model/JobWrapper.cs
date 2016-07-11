@@ -24,11 +24,11 @@ namespace HelmsDeep.Model
                 IModule mod = Modules[index].Module;
                 mod.Execute(ServiceContext.Recorder);
             }
-            catch (KeyNotFoundException ex)
+            catch (KeyNotFoundException)
             {
                 log.Error($"Работа с индексом {index} не найдена в списке");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 log.Error($"При выполнении задания произошла ошибка");
             }

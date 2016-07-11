@@ -22,10 +22,9 @@ namespace HelmsDeepCommon
         public string LogsDirFull => Path.Combine(BaseDir, LogsDir);
 
 
-        public GlobalContext(string baseDir, IController remoteProcessor)
+        public GlobalContext(string baseDir)
         {
             BaseDir = baseDir;
-            RemoteProcessor = remoteProcessor;
         }   
     }
 }

@@ -34,7 +34,7 @@ namespace ModuleMailer
 					StringSplitOptions.RemoveEmptyEntries)
 			};
 			mail = new SendMail(settings);
-			mailChecker = new MailChecker(settings);
+			mailChecker = new MailChecker(settings,glContext);
 		}
 
 		public override void Execute(DataRecorder recorder)

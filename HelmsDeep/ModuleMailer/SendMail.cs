@@ -17,8 +17,11 @@ namespace ModuleMailer
 		{
 			Settings = settings;
 		}
-
         public void Send(string subject, string text)
+        {
+            Send(subject, text, null);
+        }
+        public void Send(string subject, string text, List<string> files)
         {
             MailMessage mail = new MailMessage();
 
@@ -28,6 +31,10 @@ namespace ModuleMailer
 
             mail.Subject = subject;
             mail.Body = text;
+            if(files!=null)
+            {
+                files.ForEach(s => mail.Attachments.Add(new Attachment(s)));
+            }
 
             SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
             smtpServer.Port = 587;

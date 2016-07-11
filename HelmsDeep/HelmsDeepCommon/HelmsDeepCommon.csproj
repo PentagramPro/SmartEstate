@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseModule.cs" />
+    <Compile Include="ControllerResponse.cs" />
     <Compile Include="DataRecorder.cs" />
     <Compile Include="Exceptions\ModuleExecutionException.cs" />
     <Compile Include="GlobalContext.cs" />

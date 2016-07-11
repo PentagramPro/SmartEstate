@@ -60,10 +60,19 @@ namespace ModuleMailer
                 log.Error("Полученная команда слишком длинная, длина " + body.Length);
                 return;
             }
-
+            body = body.Trim();
             log.Info("Команда: " + body);
 
-            glContext.RemoteProcessor.ExecuteRemoteCommand(body, from);
+            ControllerResponse response = new ControllerResponse();
+            glContext.RemoteProcessor.ExecuteRemoteCommand(body, response);
+
+            log.Info("Готовим отправку результата выполнения команды");
+
+            SendMail mailSender = new SendMail(settings);
+            mailSender.Send($"результат выполнения команды '{body}'", 
+                response.ResposneBody, response.Attachments);
+
+
 		}
 	}
 }

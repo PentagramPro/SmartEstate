@@ -50,9 +50,12 @@ namespace HelmsDeep
             System.Diagnostics.Debugger.Launch();
         #endif
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-            glContext = new GlobalContext(rootPath,rcProc);
 
-            
+            glContext = new GlobalContext(rootPath);
+            rcProc = new RemoteCommandProcessor(glContext);
+
+            glContext.RemoteProcessor = rcProc;
+                        
             Directory.CreateDirectory(glContext.LogsDirFull);
             Directory.CreateDirectory(glContext.ReportsDirFull);
             Directory.CreateDirectory(glContext.RecordsDirFull);
@@ -69,7 +72,7 @@ namespace HelmsDeep
             
             context.Scheduler= StdSchedulerFactory.GetDefaultScheduler();
             context.Recorder = new DataRecorder(glContext.RecordsDirFull);
-            rcProc = new RemoteCommandProcessor(glContext);
+            
             try
             {
                 log.Info("Загружаем расписание");

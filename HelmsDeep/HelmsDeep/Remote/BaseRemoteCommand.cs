@@ -12,6 +12,6 @@ namespace HelmsDeep.Remote
     {
         protected static Logger log = LogManager.GetCurrentClassLogger();
 
-        public abstract void Execute(GlobalContext glContext, object param);
+        public abstract void Execute(GlobalContext glContext, ControllerResponse response);
     }
 }

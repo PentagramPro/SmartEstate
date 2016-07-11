@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace HelmsDeepCommon
 {
-    public interface IController
+    public class ControllerResponse
     {
-        void ExecuteRemoteCommand(string command, ControllerResponse response);
+        public string ResposneBody;
+        public List<string> Attachments = new List<string>();
     }
 }
