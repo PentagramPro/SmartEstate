@@ -65,7 +65,7 @@
     <Compile Include="Installer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\Context.cs" />
+    <Compile Include="Model\LocalContext.cs" />
     <Compile Include="Model\JobRecord.cs" />
     <Compile Include="Model\JobStartType.cs" />
     <Compile Include="Model\JobWrapper.cs" />
@@ -80,6 +80,8 @@
     <Compile Include="PluginLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Remote\BaseRemoteCommand.cs" />
+    <Compile Include="Remote\RemoteCommandProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

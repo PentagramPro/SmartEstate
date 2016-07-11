@@ -13,7 +13,7 @@ namespace HelmsDeep.Model
     {
         public static Dictionary<int, JobRecord> Modules = new Dictionary<int, JobRecord>();
         private static Logger log = LogManager.GetCurrentClassLogger();
-        public static Context ServiceContext;
+        public static LocalContext ServiceContext;
 
         public void Execute(IJobExecutionContext context)
         {

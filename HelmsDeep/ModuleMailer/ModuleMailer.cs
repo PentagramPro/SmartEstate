@@ -56,11 +56,11 @@ namespace ModuleMailer
 
 				try
 				{
-					string filepath = Path.Combine(reportsDir, filename);
-					string text = File.ReadAllText(filepath);
+                    string file = Path.GetFileName(filename);
+					string text = File.ReadAllText(filename);
 					mail.Send("Отчет из деревни " + filename, text);
-					log.Info($"Отчет {filename} отправлен, удаляем...");
-					File.Delete(filepath);
+					log.Info($"Отчет {file} отправлен, удаляем...");
+					File.Delete(filename);
 					log.Info("Файл удален");
 				}
 				catch(Exception ex)

@@ -32,7 +32,8 @@ namespace HelmsDeep
         private string recordsPath = "records";
         private static Logger log = LogManager.GetCurrentClassLogger();
         private PluginLoader<IModule> modulesLoader;
-        private Context context;
+        private LocalContext context;
+        RemoteCommandProcessor rcProc;
         
 
         public HelmsService()
@@ -56,14 +57,14 @@ namespace HelmsDeep
             
             log.Info("===================================");
             log.Info("Сервис запущен "+DateTime.Now.ToString(CultureInfo.CurrentCulture));
-            context = new Context();
+            context = new LocalContext();
             JobWrapper.ServiceContext = context;
 
             string schedulePath = Path.Combine(rootPath, scheduleFile);
-
+            
             context.Scheduler= StdSchedulerFactory.GetDefaultScheduler();
             context.Recorder = new DataRecorder(Path.Combine(rootPath,recordsPath));
-
+            rcProc = new RemoteCommandProcessor(context);
             try
             {
                 log.Info("Загружаем расписание");
@@ -93,7 +94,7 @@ namespace HelmsDeep
                     log.Info("Инициализируем "+rec.Assembly);
                     try
                     {
-                        rec.Module.Init(rec.JobParams.Parameters,rootPath);
+                        rec.Module.Init(rec.JobParams.Parameters,rootPath,rcProc);
                     }
                     catch (Exception e)
                     {

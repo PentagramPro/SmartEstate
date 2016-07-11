@@ -51,7 +51,13 @@ namespace ModuleMailer
 				log.Error("Получено письмо, не являющееся командой. Тема письма: " + subject);
 				return;
 			}
+            if(body.Length>100)
+            {
+                log.Error("Полученная команда слишком длинная, длина " + body.Length);
+                return;
+            }
 
+            log.Info("Команда: " + body);
 
 		}
 	}

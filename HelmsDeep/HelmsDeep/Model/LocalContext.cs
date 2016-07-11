@@ -8,7 +8,7 @@ using Quartz;
 
 namespace HelmsDeep.Model
 {
-    public class Context
+    public class LocalContext
     {
         public Schedule Schedule { get; set; }
         public IScheduler Scheduler;

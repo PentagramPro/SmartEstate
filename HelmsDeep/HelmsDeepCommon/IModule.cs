@@ -10,7 +10,7 @@ namespace HelmsDeepCommon
     {
         string Name { get; set; }
 
-        void Init(Dictionary<string, string> parameters, string baseDir);
+        void Init(Dictionary<string, string> parameters, string baseDir, IController controller);
 
 
         void Execute(DataRecorder recorder);

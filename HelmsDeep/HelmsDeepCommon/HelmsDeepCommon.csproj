@@ -59,6 +59,8 @@
     <Compile Include="BaseModule.cs" />
     <Compile Include="DataRecorder.cs" />
     <Compile Include="Exceptions\ModuleExecutionException.cs" />
+    <Compile Include="GlobalContext.cs" />
+    <Compile Include="IController.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
