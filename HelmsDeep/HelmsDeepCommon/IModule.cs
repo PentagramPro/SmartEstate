@@ -10,7 +10,7 @@ namespace HelmsDeepCommon
     {
         string Name { get; set; }
 
-        void Init(Dictionary<string, string> parameters, string baseDir, IController controller);
+        void Init(Dictionary<string, string> parameters, GlobalContext glContext);
 
 
         void Execute(DataRecorder recorder);

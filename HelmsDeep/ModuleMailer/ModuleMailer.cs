@@ -46,7 +46,7 @@ namespace ModuleMailer
 			}
 
 			log.Info("Модуль работы с почтой");
-			string reportsDir = Path.Combine(BaseDir, Parameters["reportsDir"]);
+			string reportsDir = glContext.ReportsDirFull;
 
 			var dirEn = Directory.EnumerateFiles(reportsDir);
 			foreach(var filename in dirEn)

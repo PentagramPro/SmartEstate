@@ -11,14 +11,13 @@ namespace HelmsDeepCommon
     {
         protected Dictionary<string, string> Parameters; 
         public string Name { get; set; }
-        protected string BaseDir { get; private set; }
-        protected IController Controller;
 
-        public void Init(Dictionary<string, string> parameters, string baseDir, IController controller)
+        protected GlobalContext glContext;
+
+        public void Init(Dictionary<string, string> parameters, GlobalContext glContext)
         {
             Parameters = parameters;
-            BaseDir = baseDir;
-            Controller = controller;
+            this.glContext = glContext;
             InitInternal();
         }
 

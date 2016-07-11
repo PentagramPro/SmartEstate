@@ -37,9 +37,9 @@ namespace ModuleReportGenerator
             });
             recorder.Rotate();
 
-            proc.ProcessFile(Path.Combine(BaseDir,Parameters["template"]));
+            proc.ProcessFile(Path.Combine(glContext.BaseDir,Parameters["template"]));
 
-            string reportsDir = Path.Combine(BaseDir, Parameters["reportsDir"]);
+            string reportsDir = glContext.ReportsDirFull;
 
             Directory.CreateDirectory(reportsDir);
 

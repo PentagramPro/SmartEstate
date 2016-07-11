@@ -26,13 +26,15 @@ namespace HelmsDeep
     
     public partial class HelmsService : ServiceBase
     {
-        private string scheduleFile = "schedule.json";
+        //private string scheduleFile = "schedule.json";
         
-        private string logFile = "logs";
-        private string recordsPath = "records";
+        //private string logFile = "logs";
+        //private string recordsPath = "records";
         private static Logger log = LogManager.GetCurrentClassLogger();
         private PluginLoader<IModule> modulesLoader;
         private LocalContext context;
+        public GlobalContext glContext;
+
         RemoteCommandProcessor rcProc;
         
 
@@ -48,11 +50,14 @@ namespace HelmsDeep
             System.Diagnostics.Debugger.Launch();
         #endif
             string rootPath = AppDomain.CurrentDomain.BaseDirectory;
-            string logPath = Path.Combine(rootPath, logFile);
-            Directory.CreateDirectory(Path.GetDirectoryName(logPath));
-            Directory.CreateDirectory(Path.Combine(rootPath, "reports"));
+            glContext = new GlobalContext(rootPath,rcProc);
 
-            SetupLogger(logPath);
+            
+            Directory.CreateDirectory(glContext.LogsDirFull);
+            Directory.CreateDirectory(glContext.ReportsDirFull);
+            Directory.CreateDirectory(glContext.RecordsDirFull);
+
+            SetupLogger(glContext.LogsDirFull);
 
             
             log.Info("===================================");
@@ -60,15 +65,15 @@ namespace HelmsDeep
             context = new LocalContext();
             JobWrapper.ServiceContext = context;
 
-            string schedulePath = Path.Combine(rootPath, scheduleFile);
+            
             
             context.Scheduler= StdSchedulerFactory.GetDefaultScheduler();
-            context.Recorder = new DataRecorder(Path.Combine(rootPath,recordsPath));
-            rcProc = new RemoteCommandProcessor(context);
+            context.Recorder = new DataRecorder(glContext.RecordsDirFull);
+            rcProc = new RemoteCommandProcessor(glContext);
             try
             {
                 log.Info("Загружаем расписание");
-                context.Schedule = Schedule.Load(schedulePath);
+                context.Schedule = Schedule.Load(glContext.ScheduleFileFull);
 
                 log.Info("Загружаем исполняющие модули");
                 modulesLoader = new PluginLoader<IModule>((type, name) =>
@@ -94,7 +99,7 @@ namespace HelmsDeep
                     log.Info("Инициализируем "+rec.Assembly);
                     try
                     {
-                        rec.Module.Init(rec.JobParams.Parameters,rootPath,rcProc);
+                        rec.Module.Init(rec.JobParams.Parameters, glContext);
                     }
                     catch (Exception e)
                     {

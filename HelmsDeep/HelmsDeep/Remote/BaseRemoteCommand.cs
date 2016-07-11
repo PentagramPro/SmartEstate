@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using HelmsDeepCommon;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace HelmsDeep.Remote
 {
     public abstract class BaseRemoteCommand
     {
-        private static Logger log = LogManager.GetCurrentClassLogger();
+        protected static Logger log = LogManager.GetCurrentClassLogger();
 
-        public abstract void Execute();
+        public abstract void Execute(GlobalContext glContext, object param);
     }
 }

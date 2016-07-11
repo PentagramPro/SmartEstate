@@ -8,6 +8,6 @@ namespace HelmsDeepCommon
 {
     public interface IController
     {
-        void ExecuteRemoteCommand(string command);
+        void ExecuteRemoteCommand(string command, object param);
     }
 }

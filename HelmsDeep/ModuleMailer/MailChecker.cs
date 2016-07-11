@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using HelmsDeepCommon;
+using NLog;
 using S22.Imap;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,12 @@ namespace ModuleMailer
 	{
 		private static Logger log = LogManager.GetCurrentClassLogger();
 		MailSettings settings;
-		public MailChecker(MailSettings settings)
+        GlobalContext glContext;
+
+		public MailChecker(MailSettings settings, GlobalContext glContext)
 		{
 			this.settings = settings;
+            this.glContext = glContext;
 		}
 
 		public void Check()
@@ -33,7 +37,7 @@ namespace ModuleMailer
 					if(IsAllowedMail(msg.From.Address))
 					{
 						log.Info(" разрешенное письмо");
-						ExecuteCommand(msg.Subject.Trim(), msg.Body);
+						ExecuteCommand(msg.From.Address, msg.Subject.Trim(), msg.Body);
 					}
 				} 
 			} 
@@ -44,7 +48,7 @@ namespace ModuleMailer
 			return settings.Targets.Contains(from);
 		}
 
-		void ExecuteCommand(string subject, string body)
+		void ExecuteCommand(string from, string subject, string body)
 		{
 			if(!subject.Equals("команда", StringComparison.InvariantCultureIgnoreCase))
 			{
@@ -59,6 +63,7 @@ namespace ModuleMailer
 
             log.Info("Команда: " + body);
 
+            glContext.RemoteProcessor.ExecuteRemoteCommand(body, from);
 		}
 	}
 }

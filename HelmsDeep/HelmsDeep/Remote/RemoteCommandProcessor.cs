@@ -12,15 +12,16 @@ namespace HelmsDeep
 {
     public class RemoteCommandProcessor : IController
     {
-        LocalContext context;
+        GlobalContext glContext;
         Dictionary<string, BaseRemoteCommand> commands;
 
         private static Logger log = LogManager.GetCurrentClassLogger();
-        public RemoteCommandProcessor(LocalContext context)
+        public RemoteCommandProcessor(GlobalContext glContext)
         {
-            this.context = context;
+            this.glContext = glContext;
+            commands["логи"] = new RCGetLogs();
         }
-        public void ExecuteRemoteCommand(string command)
+        public void ExecuteRemoteCommand(string command, object param)
         {
             command = command.Trim().ToLowerInvariant();
             if(!commands.ContainsKey(command))
@@ -29,7 +30,7 @@ namespace HelmsDeep
                 return;
             }
 
-            commands[command].Execute();
+            commands[command].Execute(glContext,param);
         }
     }
 }
