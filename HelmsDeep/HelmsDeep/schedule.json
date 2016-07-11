@@ -1,20 +1,31 @@
 {
 	"Jobs":[
 	{
-		"CronString":"0\15 * * * * ?",
+		"CronString" : "0/20 * * * * ?",
 		"Assembly":"ModuleTempSensor",
 		"Parameters":
 		{
-			"port":"COM3",
+			"port":"COM11",
 			"baudrate":"9600"
 		}
 	},
 	{
-		"CronString":"0 0\3 * * * ?",
+		"CronString" : "0 0/2 * * * ?",
 		"Assembly":"ModuleReportGenerator",
 		"Parameters":
 		{
 			"template":"report.tpl",
+			"reportsDir":"reports"
+		}
+	},
+	{
+		"CronString" : "10 0/2 * * * ?",
+		"Assembly":"ModuleMailer",
+		"Parameters":
+		{
+			"login":"der.zdravnitsa",
+			"password":"h56931IpZ",
+			"addresses":"realevilhq@gmail.com",
 			"reportsDir":"reports"
 		}
 	}]
