@@ -5,12 +5,12 @@
 		"Assembly":"ModuleTempSensor",
 		"Parameters":
 		{
-			"port":"COM11",
+			"port":"COM10",
 			"baudrate":"9600"
 		}
 	},
 	{
-		"CronString" : "0 0/2 * * * ?",
+		"CronString" : "0 0 18 * * ?",
 		"Assembly":"ModuleReportGenerator",
 		"Parameters":
 		{
@@ -19,7 +19,7 @@
 		}
 	},
 	{
-		"CronString" : "10 0/2 * * * ?",
+		"CronString" : "30 0/10 * * * ?",
 		"Assembly":"ModuleMailer",
 		"Parameters":
 		{
