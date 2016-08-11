@@ -130,6 +130,8 @@ namespace ModuleReportGenerator
                         return precalc[module][index].Avg.ToString();
                     case "Count":
                         return precalc[module][index].Count.ToString();
+                    case "Diagram":
+                        return CreateDiagram(module,index);
                 }
             }
             catch (KeyNotFoundException ex)
@@ -142,6 +144,12 @@ namespace ModuleReportGenerator
             }
 
             throw new TemplateException($"Функция {name}, строка {lineNum}: такая функция не найдена");
+        }
+
+        string CreateDiagram(string module, int index)
+        {
+
+            return "";
         }
     }
 }
