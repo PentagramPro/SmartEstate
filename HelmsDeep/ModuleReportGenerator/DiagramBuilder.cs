@@ -106,7 +106,8 @@ namespace ModuleReportGenerator
                 log.Info($" point x: {x}  y: {node.Value.Avg}");
                 x++;
             }
-            model.Axes.Add(new DateTimeAxis() { StringFormat = "HH:mm" });
+            model.Axes.Add(new DateTimeAxis() { StringFormat = "HH:mm", Title="Время" });
+            
             model.Series.Add(lineAvg);
 
             PngExporter pngEx = new PngExporter();

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using HelmsDeepCommon.Exceptions;
 using ModuleReportGenerator.Exceptions;
 using NLog;
+using System.Net.Mail;
 
 namespace ModuleReportGenerator
 {
@@ -27,7 +28,7 @@ namespace ModuleReportGenerator
             = new Dictionary<string, Dictionary<int, MinAvgMax>>();
 
         public string Report { get; private set; }
-        public List<string> Attachments = new List<string>();
+        public List<string> LinkedResources = new List<string>();
 
         string ReportsDir;
         string ReportsId;
@@ -160,11 +161,17 @@ namespace ModuleReportGenerator
         string CreateDiagram(string module, int index)
         {
             DiagramBuilder builder = new DiagramBuilder(Data[module], index);
-            string path = Path.Combine(ReportsDir, $"{ReportsId}-{DiagramCounter}.png");
+            string id = Guid.NewGuid().ToString();
+
+            string path = Path.Combine(ReportsDir, id);
             builder.Build(path);
-            Attachments.Add(path);
+
+            
+            LinkedResources.Add(id);
             DiagramCounter++;
-            return "";
+
+
+            return @"<img src='cid:" + id + @"'/>";
         }
     }
 }
