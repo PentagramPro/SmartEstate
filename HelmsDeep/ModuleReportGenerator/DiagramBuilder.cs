@@ -1,4 +1,9 @@
-﻿using System;
+﻿using NLog;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+using OxyPlot.WindowsForms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,6 +16,8 @@ namespace ModuleReportGenerator
     {
         private List<DataObject> Data;
         private int Index;
+
+        private static Logger log = LogManager.GetCurrentClassLogger();
 
         private int recordsBefore = 0, recordsAfter = 0;
         private float OverallMax = float.NaN, OverallMin = float.NaN;
@@ -35,7 +42,7 @@ namespace ModuleReportGenerator
             Index = index;
         }
 
-        public void Build()
+        public void Build(string filename)
         {
             DateTime now = DateTime.Now;
             DateTime start = now.AddHours(-24);
@@ -65,6 +72,7 @@ namespace ModuleReportGenerator
                 {
                     node = new Node(curVal);
                     Nodes[n] = node;
+
                 }
                 node.Avg = (node.Avg*node.Count + curVal)*(node.Count + 1);
                 node.Count++;
@@ -76,24 +84,33 @@ namespace ModuleReportGenerator
                 if (float.IsNaN(OverallMin) || OverallMin < node.Min)
                     OverallMin = node.Min;
             }
+
+            StoreDiagram(0, 0, filename);
         }
 
-        private void StoreDiagram(int width, int height)
+        private void StoreDiagram(int width, int height, string filename)
         {
             int step = width/(Nodes.Count + 1);
 
-            using (var bmp = new Bitmap(width, height))
-            {
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    int xPos = step;
+            PlotModel model = new PlotModel();
 
-                    foreach (var node in Nodes)
-                    {
-                        
-                    }
-                }
+         
+
+            LineSeries lineAvg = new LineSeries();
+
+            
+            float x = 0;
+            foreach (var node in Nodes)
+            {
+                lineAvg.Points.Add(new DataPoint(DateTimeAxis.ToDouble(node.Key), node.Value.Avg));
+                log.Info($" point x: {x}  y: {node.Value.Avg}");
+                x++;
             }
+            model.Axes.Add(new DateTimeAxis() { StringFormat = "HH:mm" });
+            model.Series.Add(lineAvg);
+
+            PngExporter pngEx = new PngExporter();
+            pngEx.ExportToFile(model, filename);
         }
     }
 }

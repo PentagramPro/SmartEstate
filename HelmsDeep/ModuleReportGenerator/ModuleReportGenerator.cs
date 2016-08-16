@@ -20,8 +20,11 @@ namespace ModuleReportGenerator
 
         public override void Execute(DataRecorder recorder)
         {
+            string reportsDir = glContext.ReportsDirFull;
+
             log.Info("--- Формируем отчет ---");
-            TemplateProcessor proc = new TemplateProcessor();
+            string reportId = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            TemplateProcessor proc = new TemplateProcessor(reportsDir, reportId);
             recorder.ReadRecords((dt, name, values) =>
             {
                 List<DataObject> list = null;
@@ -35,15 +38,15 @@ namespace ModuleReportGenerator
 
                 list.Add(new DataObject() {Time = dt,Values = values});
             });
-            recorder.Rotate();
+            //recorder.Rotate();
 
             proc.ProcessFile(Path.Combine(glContext.BaseDir,Parameters["template"]));
 
-            string reportsDir = glContext.ReportsDirFull;
+            
 
             Directory.CreateDirectory(reportsDir);
 
-            string reportFile = Path.Combine(reportsDir,DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".report");
+            string reportFile = Path.Combine(reportsDir, reportId + ".report");
 
             File.WriteAllText(reportFile, proc.Report);
         }

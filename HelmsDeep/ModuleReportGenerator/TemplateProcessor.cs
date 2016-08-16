@@ -27,6 +27,17 @@ namespace ModuleReportGenerator
             = new Dictionary<string, Dictionary<int, MinAvgMax>>();
 
         public string Report { get; private set; }
+        public List<string> Attachments = new List<string>();
+
+        string ReportsDir;
+        string ReportsId;
+        int DiagramCounter = 1;
+
+        public TemplateProcessor(string reportsDir, string reportsId)
+        {
+            ReportsDir = reportsDir;
+            ReportsId = reportsId;
+        }
 
         public void ProcessFile(string path)
         {
@@ -148,7 +159,11 @@ namespace ModuleReportGenerator
 
         string CreateDiagram(string module, int index)
         {
-
+            DiagramBuilder builder = new DiagramBuilder(Data[module], index);
+            string path = Path.Combine(ReportsDir, $"{ReportsId}-{DiagramCounter}.png");
+            builder.Build(path);
+            Attachments.Add(path);
+            DiagramCounter++;
             return "";
         }
     }
