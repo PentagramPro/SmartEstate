@@ -58,7 +58,7 @@ namespace ModuleMailer
 				{
                     string file = Path.GetFileName(filename);
 					string text = File.ReadAllText(filename);
-					mail.Send("Отчет из деревни " + filename, text);
+					mail.SendHtml("Отчет из деревни " + filename, text, reportsDir );
 					log.Info($"Отчет {file} отправлен, удаляем...");
 					File.Delete(filename);
 					log.Info("Файл удален");

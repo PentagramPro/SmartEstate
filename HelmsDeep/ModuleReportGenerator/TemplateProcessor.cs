@@ -112,7 +112,7 @@ namespace ModuleReportGenerator
         Regex regFunc = new Regex(@"{(\w[\w\d]*)\s*\(([^\)]*)\)}");
         string ProcessLine(string line, int lineNum)
         {
-            var ms = regFunc.Matches(line);
+            //var ms = regFunc.Matches(line);
             return regFunc.Replace(line, m =>
             {
                 return ExecuteFunction(m.Groups[1].Value,lineNum, m.Groups[2].Value.Split(','));

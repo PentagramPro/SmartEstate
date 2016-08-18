@@ -69,7 +69,7 @@ namespace ModuleMailer
             log.Info("Готовим отправку результата выполнения команды");
 
             SendMail mailSender = new SendMail(settings);
-            mailSender.Send($"результат выполнения команды '{body}'", 
+            mailSender.SendSimple($"результат выполнения команды '{body}'", 
                 response.ResposneBody, response.Attachments);
 
 

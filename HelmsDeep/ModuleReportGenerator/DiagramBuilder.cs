@@ -103,7 +103,7 @@ namespace ModuleReportGenerator
             foreach (var node in Nodes)
             {
                 lineAvg.Points.Add(new DataPoint(DateTimeAxis.ToDouble(node.Key), node.Value.Avg));
-                log.Info($" point x: {x}  y: {node.Value.Avg}");
+                //log.Info($" point x: {x}  y: {node.Value.Avg}");
                 x++;
             }
             model.Axes.Add(new DateTimeAxis() { StringFormat = "HH:mm", Title="Время" });
