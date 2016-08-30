@@ -74,7 +74,7 @@ namespace ModuleReportGenerator
                     Nodes[n] = node;
 
                 }
-                node.Avg = (node.Avg*node.Count + curVal)*(node.Count + 1);
+                node.Avg = (node.Avg*node.Count + curVal)/(node.Count + 1);
                 node.Count++;
                 node.Max = Math.Max(node.Max, curVal);
                 node.Min = Math.Min(node.Min, curVal);
@@ -106,7 +106,11 @@ namespace ModuleReportGenerator
                 //log.Info($" point x: {x}  y: {node.Value.Avg}");
                 x++;
             }
-            model.Axes.Add(new DateTimeAxis() { StringFormat = "HH:mm", Title="Время" });
+            model.Axes.Add(new DateTimeAxis()
+            {
+                StringFormat = "HH:mm", Title="Время",
+                IntervalType = DateTimeIntervalType.Hours
+            });
             
             model.Series.Add(lineAvg);
 
