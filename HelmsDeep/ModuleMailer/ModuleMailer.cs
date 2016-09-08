@@ -13,7 +13,7 @@ namespace ModuleMailer
     public class ModuleMailer : BaseModule
 	{
 		private static Logger log = LogManager.GetCurrentClassLogger();
-		object lockObject = new object();
+		
 		SendMail mail;
 		MailChecker mailChecker;
 		MailSettings settings;
@@ -39,11 +39,7 @@ namespace ModuleMailer
 
 		public override void Execute(DataRecorder recorder)
 		{
-			if (!Monitor.TryEnter(lockObject))
-			{
-				log.Warn("Задача работы с почтой уже запущена, запуск второго экземпляра остановлен");
-				return;
-			}
+			
 
 			log.Info("Модуль работы с почтой");
 			string reportsDir = glContext.ReportsDirFull;
@@ -71,8 +67,7 @@ namespace ModuleMailer
 
 			mailChecker.Check();
 
-			Monitor.Exit(lockObject);
-
+			
 		}
 
 		

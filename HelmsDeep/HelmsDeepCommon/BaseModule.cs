@@ -21,10 +21,12 @@ namespace HelmsDeepCommon
             InitInternal();
         }
 
+		
         protected abstract void InitInternal();
 
-
         public abstract void Execute(DataRecorder recorder);
+
+		
 
         protected void CheckParam(string name)
         {

@@ -29,7 +29,8 @@ namespace HelmsDeepCommon
             currentFile = File.AppendText(FileDataPath);
         }
 
-        public void Record(string name, float[] values)
+		
+        public void Record(string name, params float[] values)
         {
             lock (locker)
             {

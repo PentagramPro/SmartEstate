@@ -27,7 +27,7 @@ namespace ModuleTempSensor
 
         public override void Execute(DataRecorder recorder)
         {
-            log.Info("Измеряем температуру");
+            //log.Info("Измеряем температуру");
             ArduinoCommand cmd = new ArduinoCommand();
             cmd.Command = 'R';
             ArduinoCommand resp;
@@ -38,7 +38,7 @@ namespace ModuleTempSensor
                 float.TryParse(resp.Parameters[0], NumberStyles.Float,CultureInfo.InvariantCulture,  out temp);
                 float.TryParse(resp.Parameters[1], NumberStyles.Float, CultureInfo.InvariantCulture, out hum);
                 recorder.Record(Name,new []{temp,hum});
-                log.Info("Результат: " + resp.ToString());
+                //log.Info("Результат: " + resp.ToString());
             }
             catch (TimeoutException ex)
             {

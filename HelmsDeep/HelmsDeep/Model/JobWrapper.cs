@@ -9,6 +9,7 @@ using Quartz;
 
 namespace HelmsDeep.Model
 {
+	[DisallowConcurrentExecution]
     public class JobWrapper : IJob
     {
         public static Dictionary<int, JobRecord> Modules = new Dictionary<int, JobRecord>();

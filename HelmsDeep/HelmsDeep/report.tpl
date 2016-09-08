@@ -17,6 +17,11 @@
 
 
 <h2>График температуры:</h2>
-<p align="left">{Diagram(ModuleTempSensor,0)}</p>
+<p align="left"><img src='{Diagram(ModuleTempSensor,0)}'/></p>
+
+<h2>Диагностическая информация</h2>
+<p>Количество включений: {Count(ServiceOn,0)}</p>
+<p>Количество выключений: {Count(ServiceOff,0)}</p>
+<p>Количество измерений температуры: {Count(ModuleTempSensor,0)}</p>
   
 </body>

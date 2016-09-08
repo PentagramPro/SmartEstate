@@ -171,7 +171,8 @@ namespace ModuleReportGenerator
             DiagramCounter++;
 
 
-            return @"<img src='cid:" + id + @"'/>";
-        }
+			//return @"<img src='cid:" + id + @"'/>";
+			return @"cid:" + id ;
+		}
     }
 }

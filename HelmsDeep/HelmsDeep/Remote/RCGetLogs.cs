@@ -10,7 +10,15 @@ namespace HelmsDeep.Remote
 {
     public class RCGetLogs : BaseRemoteCommand
     {
-        public override void Execute(GlobalContext glContext, ControllerResponse response)
+		  public override string Description
+		  {
+				get
+				{
+					 return "присылает текущий лог с ошибками";
+				}
+		  }
+
+		  public override void Execute(GlobalContext glContext, ControllerResponse response)
         {
             log.Info("Запрошена отправка логов");
             if(response==null)

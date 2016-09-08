@@ -38,7 +38,7 @@ namespace ModuleReportGenerator
 
                 list.Add(new DataObject() {Time = dt,Values = values});
             });
-            //recorder.Rotate();
+            recorder.Rotate();
 
             proc.ProcessFile(Path.Combine(glContext.BaseDir,Parameters["template"]));
 
