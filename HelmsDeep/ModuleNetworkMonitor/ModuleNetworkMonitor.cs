@@ -34,7 +34,15 @@ namespace ModuleNetworkMonitor
             }
 
             log.Info("  интернтета нет, перезагружаем контроллер");
-            System.Diagnostics.Process.Start("shutdown.exe", "-r -t 0");
+            try
+            {
+                System.Diagnostics.Process.Start("shutdown.exe", "-r -t 0");
+            }
+            catch (Exception e)
+            {
+                log.Error("Не удалось перезагрузить контроллер");
+                log.Error(e);
+            }
         }
 
         bool CheckInternet()

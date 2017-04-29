@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -35,22 +36,38 @@ namespace ModuleTempSensor
             port.Close();
         }
 
+        public bool ReadPort(byte[] buf, int len, long timeout)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            int resLen = 0;
+            while (resLen < len)
+            {
+                resLen += port.Read(buf, resLen, len-resLen);
+                if (stopWatch.ElapsedMilliseconds > timeout)
+                    break;
+            }
 
+            return resLen == len;
+        }
         public void SendReceive(ArduinoCommand cmd, out ArduinoCommand resp)
         {
+            const long timeout = 2000;
             byte[] packet = cmd.Build();
             port.ReadExisting();
             log.Info("Отправляем команду: {0}",Encoding.ASCII.GetString(packet));
             port.Write(packet,0,packet.Length);
-            int read = port.Read(packet, 0, 3);
-            if (read != 3)
+            
+            if (!ReadPort(packet, 3, timeout))
             {
                 log.Error("Не удалось прочитать заголовок команды");
+                port.Flush();
                 throw new IOException();
             }
             if (packet[0] != ':')
             {
                 log.Error("Заголовок команды содержит неверный стартовый символ");
+                port.Flush();
                 throw new IOException();
             }
             string strLen = Encoding.ASCII.GetString(packet, 1, 2);
@@ -59,10 +76,10 @@ namespace ModuleTempSensor
             if (len > 0)
             {
                 packet = new byte[len];
-                read = port.Read(packet, 0, len);
-                if (read != len)
+                if (!ReadPort(packet, len, timeout))
                 {
                     log.Error("Не удалось прочитать команду: неправильная длина");
+                    port.Flush();
                     throw new IOException();
                 }
                 strResp = Encoding.ASCII.GetString(packet, 1, packet.Length - 2);
