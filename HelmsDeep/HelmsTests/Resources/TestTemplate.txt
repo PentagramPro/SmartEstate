@@ -1,0 +1,3 @@
+temp: {Min(ModuleTempSensor,0)}
+temp: {Max(ModuleTempSensor,0)}
+temp: {Avg(ModuleTempSensor,0)}

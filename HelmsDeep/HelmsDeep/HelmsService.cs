@@ -174,7 +174,7 @@ namespace HelmsDeep
 				fileTarget.ArchiveEvery = FileArchivePeriod.Day;
 				fileTarget.ArchiveFileName = Path.Combine(logPath, "all.{########}.log");
 				fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
-				fileTarget.MaxArchiveFiles = 10;
+				fileTarget.MaxArchiveFiles = 5;
 
 				var rule2 = new LoggingRule("*", LogLevel.Debug, fileTarget);
 
@@ -185,8 +185,12 @@ namespace HelmsDeep
 				fileTarget.FileName = Path.Combine(logPath, "errors.log"); ;
 				fileTarget.Layout = @"${date:format=HH\:mm\:ss} ${logger} |  ${message}";
 				fileTarget.Encoding = Encoding.UTF8;
+                fileTarget.ArchiveEvery = FileArchivePeriod.Day;
+                fileTarget.ArchiveFileName = Path.Combine(logPath, "errors.{########}.log");
+                fileTarget.ArchiveNumbering = ArchiveNumberingMode.Date;
+                fileTarget.MaxArchiveFiles = 10;
 
-				rule2 = new LoggingRule("*", LogLevel.Error, fileTarget);
+            rule2 = new LoggingRule("*", LogLevel.Error, fileTarget);
 
 				config.AddTarget("file_errors", fileTarget);
 				config.LoggingRules.Add(rule2);

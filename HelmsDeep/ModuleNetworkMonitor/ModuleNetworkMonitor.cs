@@ -26,7 +26,7 @@ namespace ModuleNetworkMonitor
 
             for (int i = 0; i < tries; i++)
             {
-                if (CheckInternet())
+                if (CheckInternet()) 
                 {
                     log.Info("  интернет обнаружен, прерываемся");
                     return;

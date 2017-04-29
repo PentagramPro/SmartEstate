@@ -15,7 +15,6 @@ namespace ModuleReportGenerator
         protected override void InitInternal()
         {
             CheckParam("template");
-            CheckParam("reportsDir");
         }
 
         public override void Execute(DataRecorder recorder)
